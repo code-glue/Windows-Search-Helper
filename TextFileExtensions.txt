@@ -1,3 +1,4 @@
+' Use single apostrophe (') for commenting.
 a
 ada
 adb
