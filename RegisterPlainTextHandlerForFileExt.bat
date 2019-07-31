@@ -119,7 +119,7 @@ reg add "%RegKeyHKCU%" /ve /d "%TextPersistentHandler%" /f >nul
 if %ErrorLevel% neq 0 (echo.Registry key: "!RegKeyHKCU!")1>&2 & goto ExitPause
 set ExitCode=0
 
-echo.Added Windows Search plain text handler for file extension: %Extension%
+echo.Registered Windows Search plain text handler for file extension: %Extension%
 
 if not defined CurrentPersistentHandler goto ExitPause
 if /i "%CurrentPersistentHandler%" == "(value not set)" goto ExitPause
@@ -171,17 +171,17 @@ call :PrintHeader
 echo.Usage:
 echo.  %ThisFileNameNoExt% [.]Extension
 echo.
-echo.    Extension    The name of the extension to add, optionally prefixed by ".".
+echo.    Extension    Name of the extension to register, optionally prefixed by "."
 echo.
 echo.Examples:
 echo.  C:\^>%ThisFileNameNoExt%
 echo.    Prompts for the file extension.
 echo.
 echo.  C:\^>%ThisFileNameNoExt% "txt"
-echo.    Adds a plain text handler for the .txt file extension.
+echo.    Registers a Windows Search plain text handler for .txt files.
 echo.
 echo.  C:\^>%ThisFileNameNoExt% ".txt"
-echo.    Adds a plain text handler for the .txt file extension.
+echo.    Registers a Windows Search plain text handler for .txt files.
 
 goto Exit
 
