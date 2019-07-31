@@ -99,7 +99,7 @@ reg query "%RegKeyHKCR%" >nul 2>&1
 if %ErrorLevel% neq 0 (
     call :SetErrorLevel 0
     reg add "!RegKeyHKCU!" /f /ve >nul
-    if !ErrorLevel! neq 0 (echo.Registry key: '!RegKeyHKCU!')1>&2 & goto ExitPause
+    if !ErrorLevel! neq 0 (echo.Registry key: "!RegKeyHKCU!")1>&2 & goto ExitPause
 )
 
 REM Check if the "OriginalPersistentHandler" value exists at "HKCR\.xxx\PersistentHandler"
@@ -116,20 +116,22 @@ REM echo.DEBUG CurrentPersistentHandler='%CurrentPersistentHandler%'
 
 REM Set the default value at "HKCU\Software\Classes\.xxx\PersistentHandler"
 reg add "%RegKeyHKCU%" /ve /d "%TextPersistentHandler%" /f >nul
-if %ErrorLevel% neq 0 (echo.Registry key: '!RegKeyHKCU!')1>&2 & goto ExitPause
+if %ErrorLevel% neq 0 (echo.Registry key: "!RegKeyHKCU!")1>&2 & goto ExitPause
 set ExitCode=0
+
+echo.Added Windows Search plain text handler for file extension: %Extension%
 
 if not defined CurrentPersistentHandler goto ExitPause
 if /i "%CurrentPersistentHandler%" == "(value not set)" goto ExitPause
 if /i "%CurrentPersistentHandler%" == "%TextPersistentHandler%" goto ExitPause
 if %OriginalPersistentHandlerExists% neq 0 goto ExitPause
 
-set ExitCode=1
 reg add "%RegKeyHKCU%" /v "OriginalPersistentHandler" /d "%CurrentPersistentHandler%" /f >nul
-if %ErrorLevel% neq 0 (echo.Registry key: '!RegKeyHKCU!')1>&2 & goto ExitPause
-set ExitCode=0
-
-echo.Added Windows Search plain text handler for file extension: %Extension%
+if %ErrorLevel% neq 0 (
+    set ExitCode=1
+    (echo.Failed to save original handler: "!CurrentPersistentHandler!")1>&2
+    (echo.Registry key: "!RegKeyHKCU!")1>&2
+)
 
 goto ExitPause
 
