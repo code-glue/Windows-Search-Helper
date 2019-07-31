@@ -40,6 +40,7 @@ call :PrintHeader
 
 :UserEnterExtension
 REM Prompt the user for the file extension. On error, reset and try again.
+REM echo.DEBUG :UserEnterExtension %*
 call :SetErrorLevel 0
 set /p Arg1="Enter file extension [Ctrl+C to exit]: "
 if %ErrorLevel% neq 0 set "Arg1=" & goto UserEnterExtension
@@ -65,7 +66,7 @@ goto GetExtension
 
 
 :GetExtension
-REM echo.DEBUG :GetExtension
+REM echo.DEBUG :GetExtension %*
 REM echo.DEBUG Extension='%Extension%'
 
 for /f "tokens=*" %%a in ("!Extension!") do (
@@ -77,11 +78,11 @@ REM echo.DEBUG Extension='%Extension%'
 if not defined Extension call :BadArg & goto ExitPause
 if "%Extension%" == "." call :BadArg & goto ExitPause
 
-goto DoSomethingWithExtension
+goto UpdateRegistry
 
 
-:DoSomethingWithExtension
-REM echo.DEBUG :DoSomethingWithExtension %*
+:UpdateRegistry
+REM echo.DEBUG :UpdateRegistry %*
 
 set RegKeyHKCR=HKCR\%Extension%\PersistentHandler
 set RegKeyHKCU=HKCU\Software\Classes\%Extension%\PersistentHandler
@@ -92,7 +93,7 @@ set CurrentPersistentHandler=
 REM echo.DEBUG RegKeyHKCR='%RegKeyHKCR%'
 REM echo.DEBUG RegKeyHKCU='%RegKeyHKCU%'
 
-REM Check if the key exists: HKCR\.xxx\PersistentHandler
+REM Check if the key exists: "HKCR\.xxx\PersistentHandler" and create it if necessary; exit on failure.
 call :SetErrorLevel 0
 reg query "%RegKeyHKCR%" >nul 2>&1
 if %ErrorLevel% neq 0 (
@@ -118,7 +119,7 @@ reg add "%RegKeyHKCU%" /ve /d "%TextPersistentHandler%" /f >nul
 if %ErrorLevel% neq 0 (echo.Registry key: '!RegKeyHKCU!')1>&2 & goto ExitPause
 set ExitCode=0
 
-if "%CurrentPersistentHandler%" == "" goto ExitPause
+if not defined CurrentPersistentHandler goto ExitPause
 if /i "%CurrentPersistentHandler%" == "(value not set)" goto ExitPause
 if /i "%CurrentPersistentHandler%" == "%TextPersistentHandler%" goto ExitPause
 if %OriginalPersistentHandlerExists% neq 0 goto ExitPause
@@ -128,7 +129,7 @@ reg add "%RegKeyHKCU%" /v "OriginalPersistentHandler" /d "%CurrentPersistentHand
 if %ErrorLevel% neq 0 (echo.Registry key: '!RegKeyHKCU!')1>&2 & goto ExitPause
 set ExitCode=0
 
-echo.Added plain text persistent handler for file extension: %Extension%
+echo.Added Windows Search plain text handler for file extension: %Extension%
 
 goto ExitPause
 
@@ -171,13 +172,13 @@ echo.
 echo.    Extension    The name of the extension to add, optionally prefixed by ".".
 echo.
 echo.Examples:
-echo.  C:\^>%ThisFileName%
+echo.  C:\^>%ThisFileNameNoExt%
 echo.    Prompts for the file extension.
 echo.
-echo.  C:\^>%ThisFileName% "txt"
+echo.  C:\^>%ThisFileNameNoExt% "txt"
 echo.    Adds a plain text handler for the .txt file extension.
 echo.
-echo.  C:\^>%ThisFileName% ".txt"
+echo.  C:\^>%ThisFileNameNoExt% ".txt"
 echo.    Adds a plain text handler for the .txt file extension.
 
 goto Exit
