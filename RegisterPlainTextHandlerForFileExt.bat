@@ -78,11 +78,11 @@ REM echo.DEBUG Extension='%Extension%'
 if not defined Extension call :BadArg & goto ExitPause
 if "%Extension%" == "." call :BadArg & goto ExitPause
 
-goto UpdateRegistry
+goto RegisterFileExtension
 
 
-:UpdateRegistry
-REM echo.DEBUG :UpdateRegistry %*
+:RegisterFileExtension
+REM echo.DEBUG :RegisterFileExtension %*
 
 set RegKeyHKCR=HKCR\%Extension%\PersistentHandler
 set RegKeyHKCU=HKCU\Software\Classes\%Extension%\PersistentHandler
