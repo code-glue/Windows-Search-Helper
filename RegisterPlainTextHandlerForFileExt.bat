@@ -113,16 +113,22 @@ for /f "tokens=2*" %%a in ('reg query "!RegKeyHKLM!" /ve 2^>nul') do set "Curren
 call :SetErrorLevel 0
 REM echo.DEBUG CurrentPersistentHandler='%CurrentPersistentHandler%'
 
-REM Set the new PersistentHandler if necessary.
-reg add "%RegKeyHKLM%" /ve /d "%TextPersistentHandler%" /f >nul
+REM Display message and exit if there is already a plain text handler.
+if /i "!CurrentPersistentHandler!" == "!TextPersistentHandler!" (
+    echo.Windows Search plain text handler already registered for file extension: !Extension!
+    set ExitCode=0
+    goto ExitPause
+)
+
+REM Set the new PersistentHandler.
+reg add "!RegKeyHKLM!" /ve /d "!TextPersistentHandler!" /f >nul
 if %ErrorLevel% neq 0 (echo.Registry key: "!RegKeyHKLM!")1>&2 & goto ExitPause
+echo.Registered Windows Search plain text handler for file extension: !Extension!
 set ExitCode=0
 
-echo.Registered Windows Search plain text handler for file extension: %Extension%
-
+REM Save the old PersistentHandler if necessary.
 if not defined CurrentPersistentHandler goto ExitPause
 if /i "!CurrentPersistentHandler!" == "(value not set)" goto ExitPause
-if /i "!CurrentPersistentHandler!" == "!TextPersistentHandler!" goto ExitPause
 if %OriginalPersistentHandlerExists% neq 0 goto ExitPause
 
 reg add "%RegKeyHKLM%" /v "OriginalPersistentHandler" /d "!CurrentPersistentHandler!" /f >nul
