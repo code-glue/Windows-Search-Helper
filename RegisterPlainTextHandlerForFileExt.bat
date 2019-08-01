@@ -98,7 +98,7 @@ reg query "%RegKeyHKLM%" >nul 2>&1
 if %ErrorLevel% neq 0 (
     call :SetErrorLevel 0
     reg add "!RegKeyHKLM!" /f /ve >nul
-    if !ErrorLevel! neq 0 (echo.Registry key: "!RegKeyHKLM!")1>&2 & goto ExitPause
+    if !ErrorLevel! neq 0 echo>&2.Registry key: "!RegKeyHKLM!" & goto ExitPause
 )
 
 REM Check if the "OriginalPersistentHandler" value exists.
@@ -122,7 +122,7 @@ if /i "!CurrentPersistentHandler!" == "!TextPersistentHandler!" (
 
 REM Set the new PersistentHandler.
 reg add "!RegKeyHKLM!" /ve /d "!TextPersistentHandler!" /f >nul
-if %ErrorLevel% neq 0 (echo.Registry key: "!RegKeyHKLM!")1>&2 & goto ExitPause
+if %ErrorLevel% neq 0 echo>&2.Registry key: "!RegKeyHKLM!" & goto ExitPause
 echo.Registered Windows Search plain text handler for file extension: !Extension!
 set ExitCode=0
 
@@ -134,8 +134,8 @@ if %OriginalPersistentHandlerExists% neq 0 goto ExitPause
 reg add "%RegKeyHKLM%" /v "OriginalPersistentHandler" /d "!CurrentPersistentHandler!" /f >nul
 if %ErrorLevel% neq 0 (
     set ExitCode=1
-    (echo.Failed to save original handler: "!CurrentPersistentHandler!")1>&2
-    (echo.Registry key: "!RegKeyHKLM!")1>&2
+    echo>&2.Failed to save original handler: "!CurrentPersistentHandler!"
+    echo>&2.Registry key: "!RegKeyHKLM!"
 )
 
 goto ExitPause
@@ -157,13 +157,13 @@ exit /b %1
 
 :TooManyArgs
 REM echo.DEBUG :TooManyArgs %*
-(echo.Too many arguments.)1>&2
+echo>&2.Too many arguments.
 goto :Usage
 
 
 :BadArg
 REM echo.DEBUG :BadArg %*
-(echo.Invalid extension: "%Arg1NoQuotes%")1>&2
+echo>&2.Invalid extension: "%Arg1NoQuotes%"
 exit /b 1
 
 
