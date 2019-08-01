@@ -27,7 +27,7 @@ REM echo.DEBUG Arg2='%Arg2%'
 REM echo.DEBUG Arg1NoSpaces='%Arg1NoSpaces%'
 REM echo.DEBUG Extension='%Extension%'
 
-if "%Arg1NoSpaces%" == "/?" goto HelpArg
+if "!Arg1NoSpaces!" == "/?" goto HelpArg
 if defined Arg2 goto TooManyArgs
 
 goto GetExtension
@@ -76,7 +76,7 @@ for /f "tokens=*" %%a in ("!Extension!") do (
 REM echo.DEBUG Extension='%Extension%'
 
 if not defined Extension call :BadArg & goto ExitPause
-if "%Extension%" == "." call :BadArg & goto ExitPause
+if "!Extension!" == "." call :BadArg & goto ExitPause
 
 goto RegisterFileExtension
 
@@ -84,53 +84,52 @@ goto RegisterFileExtension
 :RegisterFileExtension
 REM echo.DEBUG :RegisterFileExtension %*
 
-set RegKeyHKCR=HKCR\%Extension%\PersistentHandler
-set RegKeyHKCU=HKCU\Software\Classes\%Extension%\PersistentHandler
+set RegKeyHKLM=HKLM\Software\Classes\%Extension%\PersistentHandler
+
 set TextPersistentHandler={5e941d80-bf96-11cd-b579-08002b30bfeb}
 set OriginalPersistentHandlerExists=0
 set CurrentPersistentHandler=
 
-REM echo.DEBUG RegKeyHKCR='%RegKeyHKCR%'
-REM echo.DEBUG RegKeyHKCU='%RegKeyHKCU%'
+REM echo.DEBUG RegKeyHKLM='%RegKeyHKLM%'
 
-REM Check if the key exists: "HKCR\.xxx\PersistentHandler" and create it if necessary; exit on failure.
+REM Check if the registry key exists and create it if necessary; exit on failure.
 call :SetErrorLevel 0
-reg query "%RegKeyHKCR%" >nul 2>&1
+reg query "%RegKeyHKLM%" >nul 2>&1
 if %ErrorLevel% neq 0 (
     call :SetErrorLevel 0
-    reg add "!RegKeyHKCU!" /f /ve >nul
-    if !ErrorLevel! neq 0 (echo.Registry key: "!RegKeyHKCU!")1>&2 & goto ExitPause
+    reg add "!RegKeyHKLM!" /f /ve >nul
+    if !ErrorLevel! neq 0 (echo.Registry key: "!RegKeyHKLM!")1>&2 & goto ExitPause
 )
 
-REM Check if the "OriginalPersistentHandler" value exists at "HKCR\.xxx\PersistentHandler"
-reg query "%RegKeyHKCR%" /v "OriginalPersistentHandler" >nul 2>&1
+REM Check if the "OriginalPersistentHandler" value exists.
+reg query "%RegKeyHKLM%" /v "OriginalPersistentHandler" >nul 2>&1
 if %ErrorLevel% equ 0 set "OriginalPersistentHandlerExists=1"
 call :SetErrorLevel 0
 
 REM echo.DEBUG OriginalPersistentHandlerExists='%OriginalPersistentHandlerExists%'
 
-REM Get the default value at "HKCR\.xxx\PersistentHandler"
-for /f "tokens=2*" %%a in ('reg query "!RegKeyHKCR!" /ve 2^>nul') do set "CurrentPersistentHandler=%%b"
+REM Get the current PersistentHandler.
+for /f "tokens=2*" %%a in ('reg query "!RegKeyHKLM!" /ve 2^>nul') do set "CurrentPersistentHandler=%%b"
 call :SetErrorLevel 0
 REM echo.DEBUG CurrentPersistentHandler='%CurrentPersistentHandler%'
 
-REM Set the default value at "HKCU\Software\Classes\.xxx\PersistentHandler"
-reg add "%RegKeyHKCU%" /ve /d "%TextPersistentHandler%" /f >nul
-if %ErrorLevel% neq 0 (echo.Registry key: "!RegKeyHKCU!")1>&2 & goto ExitPause
+REM Set the new PersistentHandler if necessary.
+reg add "%RegKeyHKLM%" /ve /d "%TextPersistentHandler%" /f >nul
+if %ErrorLevel% neq 0 (echo.Registry key: "!RegKeyHKLM!")1>&2 & goto ExitPause
 set ExitCode=0
 
 echo.Registered Windows Search plain text handler for file extension: %Extension%
 
 if not defined CurrentPersistentHandler goto ExitPause
-if /i "%CurrentPersistentHandler%" == "(value not set)" goto ExitPause
-if /i "%CurrentPersistentHandler%" == "%TextPersistentHandler%" goto ExitPause
+if /i "!CurrentPersistentHandler!" == "(value not set)" goto ExitPause
+if /i "!CurrentPersistentHandler!" == "!TextPersistentHandler!" goto ExitPause
 if %OriginalPersistentHandlerExists% neq 0 goto ExitPause
 
-reg add "%RegKeyHKCU%" /v "OriginalPersistentHandler" /d "%CurrentPersistentHandler%" /f >nul
+reg add "%RegKeyHKLM%" /v "OriginalPersistentHandler" /d "!CurrentPersistentHandler!" /f >nul
 if %ErrorLevel% neq 0 (
     set ExitCode=1
     (echo.Failed to save original handler: "!CurrentPersistentHandler!")1>&2
-    (echo.Registry key: "!RegKeyHKCU!")1>&2
+    (echo.Registry key: "!RegKeyHKLM!")1>&2
 )
 
 goto ExitPause
@@ -177,11 +176,11 @@ echo.Examples:
 echo.  C:\^>%ThisFileNameNoExt%
 echo.    Prompts for the file extension.
 echo.
-echo.  C:\^>%ThisFileNameNoExt% "txt"
-echo.    Registers a Windows Search plain text handler for .txt files.
+echo.  C:\^>%ThisFileNameNoExt% "sln"
+echo.    Registers a Windows Search plain text handler for .sln files.
 echo.
-echo.  C:\^>%ThisFileNameNoExt% ".txt"
-echo.    Registers a Windows Search plain text handler for .txt files.
+echo.  C:\^>%ThisFileNameNoExt% .sln
+echo.    Registers a Windows Search plain text handler for .sln files.
 
 goto Exit
 
@@ -200,7 +199,7 @@ REM Pause on error if this script was not run from a command line.
 if %ExitCode% equ 0 goto Exit
 set CmdCmdLineNoQuotes=%CmdCmdLine:"=%
 set CmdCmdLineNoFileName=!CmdCmdLineNoQuotes:%ThisFileName%=!
-if "%CmdCmdLineNoQuotes%" == "%CmdCmdLineNoFileName%" goto Exit
+if "!CmdCmdLineNoQuotes!" == "!CmdCmdLineNoFileName!" goto Exit
 REM echo.DEBUG :ExitPause ExitCode=%ExitCode%
 pause
 
