@@ -201,12 +201,12 @@ exit /b 1
 
 
 :ExitPause
-REM Pause on error if this script was not run from a command line.
-if %ExitCode% equ 0 goto Exit
+REM Pause if this script was not run from a command line.
 set CmdCmdLineNoQuotes=!CmdCmdLine:"=!
 set CmdCmdLineNoFileName=!CmdCmdLineNoQuotes:%ThisFileName%=!
 if "!CmdCmdLineNoQuotes!" == "!CmdCmdLineNoFileName!" goto Exit
-REM echo.DEBUG :ExitPause ExitCode=%ExitCode%
+REM echo.DEBUG :Pause ExitCode=%ExitCode%
+echo.
 pause
 
 
