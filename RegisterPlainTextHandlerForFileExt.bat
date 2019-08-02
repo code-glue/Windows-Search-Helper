@@ -200,12 +200,21 @@ echo.
 exit /b 1
 
 
+:CheckAdmin
+net session >nul 2>&1
+exit /b %ErrorLevel%
+
+
 :ExitPause
+REM echo.DEBUG :ExitPause ExitCode=%ExitCode%
+if %ExitCode% neq 0 (
+    call :CheckAdmin    
+    if %ErrorLevel% neq 0 echo.Try running this script as Administrator.
+)
 REM Pause if this script was not run from a command line.
 set CmdCmdLineNoQuotes=!CmdCmdLine:"=!
 set CmdCmdLineNoFileName=!CmdCmdLineNoQuotes:%ThisFileName%=!
 if "!CmdCmdLineNoQuotes!" == "!CmdCmdLineNoFileName!" goto Exit
-REM echo.DEBUG :ExitPause ExitCode=%ExitCode%
 echo.
 pause
 
