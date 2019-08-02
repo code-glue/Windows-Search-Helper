@@ -6,7 +6,7 @@ set ExitCode=1
 set ThisFileName=%~nx0
 set ThisFileNameNoExt=%~n0
 set FileExtensionsPath=%~dp0TextFileExtensions.txt
-set RegisterTextFileExtension=%~dp0RegisterPlainTextHandlerForFileExt.bat
+set RegisterTextFileExtension=%~dp0RegisterPlainTextFilterForFileExt.bat
 set Arg1=%1
 
 REM echo.DEBUG ExitCode='%ExitCode%'
@@ -31,7 +31,7 @@ REM echo.DEBUG :IsAdmin=%IsAdmin%
 
 
 echo.
-echo.Registering Windows Search plain text handlers for the following file extensions:
+echo.Registering Windows Search plain text filters for the following file extensions:
 echo.
 for /f "usebackq eol=' tokens=*" %%a in ("%FileExtensionsPath%") do (
     <nul set /p =.%%a 

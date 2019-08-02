@@ -113,9 +113,9 @@ for /f "tokens=2*" %%a in ('reg query "!RegKeyHKLM!" /ve 2^>nul') do set "Curren
 call :SetErrorLevel 0
 REM echo.DEBUG CurrentPersistentHandler='%CurrentPersistentHandler%'
 
-REM Display message and exit if there is already a plain text handler.
+REM Display message and exit if there is already a plain text filter.
 if /i "!CurrentPersistentHandler!" == "!TextPersistentHandler!" (
-    echo.Windows Search plain text handler already registered for file extension: !Extension!
+    echo.Windows Search plain text filter already registered for file extension: !Extension!
     set ExitCode=0
     goto ExitPause
 )
@@ -123,7 +123,7 @@ if /i "!CurrentPersistentHandler!" == "!TextPersistentHandler!" (
 REM Set the new PersistentHandler.
 reg add "!RegKeyHKLM!" /ve /d "!TextPersistentHandler!" /f >nul
 if %ErrorLevel% neq 0 echo>&2.Registry key: "!RegKeyHKLM!" & goto ExitPause
-echo.Registered Windows Search plain text handler for file extension: !Extension!
+echo.Registered Windows Search plain text filter for file extension: !Extension!
 set ExitCode=0
 
 REM Save the old PersistentHandler if necessary.
@@ -134,7 +134,7 @@ if %OriginalPersistentHandlerExists% neq 0 goto ExitPause
 reg add "%RegKeyHKLM%" /v "OriginalPersistentHandler" /d "!CurrentPersistentHandler!" /f >nul
 if %ErrorLevel% neq 0 (
     set ExitCode=1
-    echo>&2.Failed to save original handler: "!CurrentPersistentHandler!"
+    echo>&2.Failed to save original filter: "!CurrentPersistentHandler!"
     echo>&2.Registry key: "!RegKeyHKLM!"
 )
 
@@ -183,10 +183,10 @@ echo.  C:\^>%ThisFileNameNoExt%
 echo.    Prompts for the file extension.
 echo.
 echo.  C:\^>%ThisFileNameNoExt% "sln"
-echo.    Registers a Windows Search plain text handler for .sln files.
+echo.    Registers a Windows Search plain text filter for .sln files.
 echo.
 echo.  C:\^>%ThisFileNameNoExt% .sln
-echo.    Registers a Windows Search plain text handler for .sln files.
+echo.    Registers a Windows Search plain text filter for .sln files.
 
 goto Exit
 
