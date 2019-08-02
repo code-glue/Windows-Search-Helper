@@ -205,7 +205,7 @@ REM Pause if this script was not run from a command line.
 set CmdCmdLineNoQuotes=!CmdCmdLine:"=!
 set CmdCmdLineNoFileName=!CmdCmdLineNoQuotes:%ThisFileName%=!
 if "!CmdCmdLineNoQuotes!" == "!CmdCmdLineNoFileName!" goto Exit
-REM echo.DEBUG :Pause ExitCode=%ExitCode%
+REM echo.DEBUG :ExitPause ExitCode=%ExitCode%
 echo.
 pause
 
