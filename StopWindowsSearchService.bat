@@ -3,6 +3,7 @@
 SetLocal EnableDelayedExpansion
 
 set ExitCode=1
+set ThisFileName=%~nx0
 
 goto StopService
 
