@@ -16,7 +16,7 @@ if not defined SearchServicePid goto ServiceNotStarted
 if %SearchServicePid% equ 0 goto ServiceNotStarted
 
 call :SetErrorLevel 0
-net stop wsearch 2>nul
+net stop wsearch /y 2>nul
 
 if %ErrorLevel% neq 0 (
     echo>&2.Failed to stop the Windows Search service.
