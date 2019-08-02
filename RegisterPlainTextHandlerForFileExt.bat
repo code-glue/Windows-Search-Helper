@@ -194,8 +194,8 @@ goto Exit
 :PrintHeader
 echo.
 echo.Description:
-echo.  Configures Windows Search to index the contents of all files with the specified
-echo.  extension as if they are plain text files.
+echo.  Configures Windows Search to index the contents of all files with the
+echo.  specified extension as if they are plain text files.
 echo.
 exit /b 1
 
