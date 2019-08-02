@@ -15,7 +15,6 @@ REM echo.DEBUG SearchServicePid=%SearchServicePid%
 
 if %SearchServicePid% neq 0 goto ServiceAlreadyStarted
 
-REM Start the Windows Search service.
 call :SetErrorLevel 0
 net start wsearch 2>nul
 
@@ -23,7 +22,6 @@ if %ErrorLevel% neq 0 (
     echo>&2.Failed to start the Windows Search service.
     goto ExitPause
 )
-
 set ExitCode=0
 goto ExitPause
 
