@@ -19,14 +19,8 @@ REM Start the Windows Search service.
 call :SetErrorLevel 0
 net start wsearch 2>nul
 
-REM If starting the service failed, force kill its process and retry.
 if %ErrorLevel% neq 0 (
     echo>&2.Failed to start the Windows Search service.
-    REM echo>&2.Attemping to force kill its process ...
-    REM call :ForceKillSearchService || (echo>&2.The Windows Search service could not be stopped. & goto Exit)
-    REM echo Retrying ...
-    REM verify >nul
-    REM net start wsearch
     goto ExitPause
 )
 
@@ -38,12 +32,6 @@ goto ExitPause
 call :SetErrorLevel 0
 for /f "tokens=3" %%a in ('sc queryex wsearch ^| findstr PID') do (set "SearchServicePid=%%a")
 exit /b %ErrorLevel%
-
-
-REM :ForceKillProcess
-REM call :SetErrorLevel 0
-REM taskkill /pid %SearchServicePid% /f
-REM exit /b %ErrorLevel%
 
 
 :ServiceAlreadyStarted
