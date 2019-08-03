@@ -79,11 +79,19 @@ if %ErrorLevel% neq 0 (
     echo>&2.Failed to start the Windows Search service.
     exit /b 1
 )
-
 exit /b 0
 
+
 :DeleteIndex
-echo.DEBUG :DeleteIndex %*
+REM echo.DEBUG :DeleteIndex %*
+echo.Deleting directory: "%IndexLocation%" . . .
+call :SetErrorLevel 0
+rd /s /q "%IndexLocation%"
+
+REM rd does not provide a reliable exit code, so check if the directory still exists.
+if exist "%IndexLocation%" echo>&2.Failed to delete Windows Search index. & echo. & exit /b 1
+echo.Successfully deleted Windows Search index.
+echo.
 exit /b 0
 
 
