@@ -29,7 +29,6 @@ if %ErrorLevel% neq 0 goto ExitPause
 call :StartService
 if %ErrorLevel% neq 0 goto ExitPause
 
-echo.success
 set ExitCode=0
 goto ExitPause
 
