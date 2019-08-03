@@ -38,12 +38,18 @@ call :SetErrorLevel 0
 reg query "!WinSearchRegKey!" /v "!WinSearchRegValue!" >nul
 if %ErrorLevel% neq 0 echo>&2.Registry Key -- Value: "!WinSearchRegKey!" -- "!WinSearchRegValue!" & exit /b 1
 
-for /f "tokens=2*" %%a in ('reg query "!WinSearchRegKey!" /v "!WinSearchRegValue!" 2^>nul') do set "IndexLocation=%%b"
-if defined IndexLocation exit /b 0
+for /f "tokens=2*" %%a in ('reg query "!WinSearchRegKey!" /v "!WinSearchRegValue!" 2^>nul') do set "RegistryIndexLocation=%%b"
+if not defined RegistryIndexLocation (
+    echo>&2.Failed to get Windows Search index location from registry.
+    echo>&2.Registry Key -- Value: "!WinSearchRegKey!" -- "!WinSearchRegValue!"
+    exit /b 1
+)
+REM echo.DEBUG RegistryIndexLocation='%RegistryIndexLocation%'
 
-echo>&2.Failed to get Windows Search index location from registry.
-echo>&2.Registry Key -- Value: "!WinSearchRegKey!" -- "!WinSearchRegValue!"
-exit /b 1
+REM Expand any variables
+for /f  %%a in ('echo.%RegistryIndexLocation%') do set "IndexLocation=%%a"
+exit /b 0
+
 
 
 :GetSearchServicePid
