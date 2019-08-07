@@ -195,7 +195,9 @@ goto Exit
 echo.
 echo.Description:
 echo.  Configures Windows Search to index the contents of all files with the
-echo.  specified extension as if they are plain text files.
+echo.  specified extension as if they are plain text files. If the file extension
+echo.  is already registered with a different filter, it will be saved so that it
+echo.  may be later restored.
 echo.
 exit /b 1
 

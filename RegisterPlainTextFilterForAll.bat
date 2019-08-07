@@ -55,7 +55,9 @@ REM echo.DEBUG :HelpArg %*
 echo.
 echo.Description:
 echo.  Configures Windows Search to index the contents of all files which have any
-echo.  of the file extensions below as plain text files.
+echo.  of the file extensions below as plain text files. If a file extension is
+echo.  already registered with a different filter, it will be saved so that it may
+echo.  be later restored.
 echo.
 echo.File extensions:
 for /f "usebackq eol=' tokens=*" %%a in ("%FileExtensionsPath%") do (
