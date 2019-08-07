@@ -59,6 +59,25 @@ ___
       C:\>RegisterPlainTextFilterForFileExt .sln
         Registers a Windows Search plain text filter for .sln files.
 ___
+### RegisterPropertiesOnlyFilterForFileExt.bat
+  Configures Windows Search to index only the file properties (and not the contents) of files with the specified extension. If the file extension is already registered with a different filter, it will be saved so that it may be later restored.
+
+**Usage:**
+
+    RegisterPropertiesOnlyFilterForFileExt [.]Extension
+
+      Extension    Name of the extension to register, optionally prefixed by "."
+
+    Examples:
+      C:\>RegisterPropertiesOnlyFilterForFileExt
+        Prompts for the file extension.
+    
+      C:\>RegisterPropertiesOnlyFilterForFileExt "sln"
+        Registers a Windows Search properties-only filter for .sln files.
+    
+      C:\>RegisterPropertiesOnlyFilterForFileExt .sln
+        Registers a Windows Search properties-only filter for .sln files.
+___
 ### RebuildWindowsSearchIndex.bat
   Deletes and rebuilds the Windows Search index. The default location for the index is "C:\ProgramData\Microsoft\Search\Data"
   
