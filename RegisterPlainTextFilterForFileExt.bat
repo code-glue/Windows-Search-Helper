@@ -87,7 +87,6 @@ REM echo.DEBUG :BeginRegistration %*
 set RegKeyHKLM=HKLM\Software\Classes\%Extension%\PersistentHandler
 set TextPersistentHandler={5e941d80-bf96-11cd-b579-08002b30bfeb}
 set DefaultPersistentHandler={00000000-0000-0000-0000-000000000000}
-set PersistentHandlerKeyExists=1
 set OriginalPersistentHandlerExists=0
 set CurrentPersistentHandler=
 
@@ -101,10 +100,8 @@ if %ErrorLevel% neq 0 (
     set "PersistentHandlerKeyExists=0"
     reg add "!RegKeyHKLM!" /f /ve >nul
     if !ErrorLevel! neq 0 echo>&2.Registry key: "!RegKeyHKLM!" & goto ExitPause
+    goto RegisterPersistentHandler
 )
-
-REM echo.DEBUG PersistentHandlerKeyExists='%PersistentHandlerKeyExists%'
-if %PersistentHandlerKeyExists% equ 0 goto RegisterPersistentHandler
 
 REM Check if the "OriginalPersistentHandler" value exists.
 reg query "%RegKeyHKLM%" /v "OriginalPersistentHandler" >nul 2>&1
