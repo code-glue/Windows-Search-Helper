@@ -122,9 +122,7 @@ if defined CurrentPersistentHandler (
 
 :RegisterPersistentHandler
 REM echo.DEBUG CurrentPersistentHandler='%CurrentPersistentHandler%'
-if not defined CurrentPersistentHandler (
-    set "CurrentPersistentHandler=%DefaultPersistentHandler%"
-)
+if not defined CurrentPersistentHandler set "CurrentPersistentHandler=%DefaultPersistentHandler%"
 REM echo.DEBUG CurrentPersistentHandler='%CurrentPersistentHandler%'
 
 REM Display message and exit if there is already a plain text filter.
