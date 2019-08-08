@@ -78,11 +78,11 @@ REM echo.DEBUG Extension='%Extension%'
 if not defined Extension call :BadArg & goto ExitPause
 if "!Extension!" == "." call :BadArg & goto ExitPause
 
-goto RegisterFileExtension
+goto BeginRegistration
 
 
-:RegisterFileExtension
-REM echo.DEBUG :RegisterFileExtension %*
+:BeginRegistration
+REM echo.DEBUG :BeginRegistration %*
 
 set RegKeyHKLM=HKLM\Software\Classes\%Extension%\PersistentHandler
 set TextPersistentHandler={5e941d80-bf96-11cd-b579-08002b30bfeb}
