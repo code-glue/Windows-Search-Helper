@@ -95,7 +95,7 @@ REM echo.DEBUG RegKeyHKLM='%RegKeyHKLM%'
 
 REM Check if the registry key exists and create it if necessary; exit on failure.
 call :SetErrorLevel 0
-reg query "%RegKeyHKLM%" >nul 2>&1
+reg query "%RegKeyHKLM%" /ve >nul 2>&1
 if %ErrorLevel% neq 0 (
     call :SetErrorLevel 0
     set "PersistentHandlerKeyExists=0"
