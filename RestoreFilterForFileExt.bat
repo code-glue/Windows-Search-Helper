@@ -102,17 +102,20 @@ REM Get the original PersistentHandler.
 for /f "tokens=2*" %%a in ('reg query "!RegKeyHKLM!" /v "OriginalPersistentHandler" 2^>nul') do set "OriginalPersistentHandler=%%b"
 if not defined OriginalPersistentHandler goto OriginalFilterNotFound
 REM echo.DEBUG OriginalPersistentHandler='%OriginalPersistentHandler%'
+if "!OriginalPersistentHandler!" == "!DefaultPersistentHandler!" set "OriginalPersistentHandler="
+REM echo.DEBUG OriginalPersistentHandler='%OriginalPersistentHandler%'
 
 REM Set the new PersistentHandler.
 call :SetErrorLevel 0
-if /i "!OriginalPersistentHandler!" == "!DefaultPersistentHandler!" (
+reg add "!RegKeyHKLM!" /ve /d "!OriginalPersistentHandler!" /f >nul
+if %ErrorLevel% neq 0 echo>&2.Registry key: "!RegKeyHKLM!" & goto ExitPause
+
+if not defined OriginalPersistentHandler (
     reg delete "!RegKeyHKLM!" /ve /f >nul
+    REM echo.DEBUG ErrorLevel='!ErrorLevel!'
     if %ErrorLevel% neq 0 echo>&2.Registry key: "!RegKeyHKLM!" & goto ExitPause
     goto RestoreSuccess
 )
-
-reg add "!RegKeyHKLM!" /ve /d "!OriginalPersistentHandler!" /f >nul
-if %ErrorLevel% neq 0 echo>&2.Registry key: "!RegKeyHKLM!" & goto ExitPause
 
 
 :RestoreSuccess
