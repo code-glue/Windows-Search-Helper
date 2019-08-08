@@ -85,7 +85,7 @@ goto RegisterFileExtension
 REM echo.DEBUG :RegisterFileExtension %*
 
 set RegKeyHKLM=HKLM\Software\Classes\%Extension%\PersistentHandler
-
+set DefaultPersistentHandler={00000000-0000-0000-0000-000000000000}
 set PersistentHandlerKeyExists=1
 set OriginalPersistentHandlerExists=0
 set CurrentPersistentHandler=
@@ -102,11 +102,12 @@ if %ErrorLevel% neq 0 (
     if !ErrorLevel! neq 0 echo>&2.Registry key: "!RegKeyHKLM!" & goto ExitPause
 )
 
+REM echo.DEBUG PersistentHandlerKeyExists='%PersistentHandlerKeyExists%'
+if %PersistentHandlerKeyExists% equ 0 goto RegisterPersistentHandler
+
 REM Check if the "OriginalPersistentHandler" value exists.
 reg query "%RegKeyHKLM%" /v "OriginalPersistentHandler" >nul 2>&1
 if %ErrorLevel% equ 0 set "OriginalPersistentHandlerExists=1"
-call :SetErrorLevel 0
-
 REM echo.DEBUG OriginalPersistentHandlerExists='%OriginalPersistentHandlerExists%'
 
 REM Get the current PersistentHandler.
@@ -117,25 +118,27 @@ if defined CurrentPersistentHandler (
     if /i "!CurrentPersistentHandler!" == "(value not set)" set "CurrentPersistentHandler="
 )
 
-call :SetErrorLevel 0
+
+:RegisterPersistentHandler
+REM echo.DEBUG CurrentPersistentHandler='%CurrentPersistentHandler%'
+if not defined CurrentPersistentHandler set "CurrentPersistentHandler=%DefaultPersistentHandler%"
+REM echo.DEBUG CurrentPersistentHandler='%CurrentPersistentHandler%'
 
 REM Display message and exit if there is already a properties-only filter.
-if %PersistentHandlerKeyExists% equ 1 (
-    if not defined CurrentPersistentHandler (
-        echo.Windows Search properties-only filter already registered for file extension: !Extension!
-        set ExitCode=0
-        goto ExitPause
-    )
+if /i "!CurrentPersistentHandler!" == "!DefaultPersistentHandler!" (
+    echo.Windows Search properties-only filter already registered for file extension: !Extension!
+    set "ExitCode=0"
+    goto ExitPause
 )
 
 REM Set the new PersistentHandler.
+call :SetErrorLevel 0
 reg delete "!RegKeyHKLM!" /ve /f >nul
 if %ErrorLevel% neq 0 echo>&2.Registry key: "!RegKeyHKLM!" & goto ExitPause
 echo.Registered Windows Search properties-only filter for file extension: !Extension!
 set ExitCode=0
 
 REM Save the old PersistentHandler if necessary.
-if not defined CurrentPersistentHandler goto ExitPause
 if %OriginalPersistentHandlerExists% neq 0 goto ExitPause
 
 reg add "%RegKeyHKLM%" /v "OriginalPersistentHandler" /d "!CurrentPersistentHandler!" /f >nul
