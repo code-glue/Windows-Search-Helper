@@ -96,7 +96,7 @@ REM Check if the registry key exists and create it if necessary; exit on failure
 call :SetErrorLevel 0
 reg query "%RegKeyHKLM%" /ve >nul 2>&1
 if %ErrorLevel% neq 0 (
-    echo.DEBUG Registry key does not exist: "!RegKeyHKLM!"
+    REM echo.DEBUG Registry key does not exist: "!RegKeyHKLM!"
     call :SetErrorLevel 0
     reg add "!RegKeyHKLM!" /ve /f >nul
     if !ErrorLevel! neq 0 echo>&2.Registry key: "!RegKeyHKLM!" & goto ExitPause
@@ -105,7 +105,7 @@ if %ErrorLevel% neq 0 (
 
 REM Get the current PersistentHandler.
 for /f "tokens=2*" %%a in ('reg query "!RegKeyHKLM!" /ve 2^>nul') do set "CurrentPersistentHandler=%%b"
-echo.DEBUG CurrentPersistentHandler='%CurrentPersistentHandler%'
+REM echo.DEBUG CurrentPersistentHandler='%CurrentPersistentHandler%'
 
 REM If the current PersistentHandler is empty, just delete the default value and exit.
 REM echo.DEBUG CurrentPersistentHandler='%CurrentPersistentHandler%'
