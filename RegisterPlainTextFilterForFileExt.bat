@@ -103,7 +103,7 @@ if %ErrorLevel% neq 0 (
     if !ErrorLevel! neq 0 echo>&2.Registry key: "!RegKeyHKLM!" & goto ExitPause
 )
 
-REM echo.DEBUG PersistentHandlerKeyExists='%PersistentHandlerKeyExists%'.
+REM echo.DEBUG PersistentHandlerKeyExists='%PersistentHandlerKeyExists%'
 if %PersistentHandlerKeyExists% equ 0 goto RegisterPersistentHandler
 
 REM Check if the "OriginalPersistentHandler" value exists.
