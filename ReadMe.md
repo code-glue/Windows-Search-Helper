@@ -78,6 +78,25 @@ ___
       C:\>RegisterPropertiesOnlyFilterForFileExt .sln
         Registers a Windows Search properties-only filter for .sln files.
 ___
+### RestoreFilterForFileExt.bat
+  Configures Windows Search to restore the original search filter for the specified file extension. If the original search filter is not found, no operation is performed.
+
+**Usage:**
+
+    RestoreFilterForFileExt [.]Extension
+
+      Extension    Name of the extension to restore, optionally prefixed by "."
+
+    Examples:
+      C:\>RestoreFilterForFileExt
+        Prompts for the file extension.
+    
+      C:\>RestoreFilterForFileExt "sln"
+        Restores the original Windows Search filter for .sln files.
+    
+      C:\>RestoreFilterForFileExt .sln
+        Restores the original Windows Search filter for .sln files.
+___
 ### RebuildWindowsSearchIndex.bat
   Deletes and rebuilds the Windows Search index. The default location for the index is "C:\ProgramData\Microsoft\Search\Data"
   
