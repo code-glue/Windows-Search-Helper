@@ -22,6 +22,7 @@ Open Windows Indexing Options and click the Modify button. From here select all 
 
 * Helpful when setting up a new computer.
 * Search within any file comprised of plain text: html, xml, Visual Studio project files, etc, regardless of markup.
+* Using Null filters can greatly reduce the size of the Windows Search index. It is generally used for binary files.
 * For most users, these scripts need be run only once, hence why these are scripts and not an app.
 * All scripts return an exit code of 0 on success; 1 on failure.
 * These scripts need to be run as Administrator.
