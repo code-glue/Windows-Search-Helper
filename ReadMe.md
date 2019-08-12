@@ -26,6 +26,8 @@ Open Windows Indexing Options and click the Modify button. From here select all 
 * All scripts return an exit code of 0 on success; 1 on failure.
 * These scripts need to be run as Administrator.
 
+**Pro Tip:** Create a task in Windows Task Scheduler to run **RebuildWindowsSearchIndex.bat** once a week to keep the search index optimized.
+
 ___
 ## Scripts:
 ### RegisterPlainTextFilterForAll.bat
