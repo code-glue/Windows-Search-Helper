@@ -1,6 +1,8 @@
 # Windows-Search-Helper
 
-## When you want to search within all your plain text files really fast.
+## An attempt to make Windows Search suck less.
+
+### Search within all your plain text files really fast:
 
 
 ![Before and After Demo](demo/BeforeAndAfter_720x480.gif?raw=true "Before and After Demo")
