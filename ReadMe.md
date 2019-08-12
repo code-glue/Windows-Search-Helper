@@ -82,6 +82,25 @@ ___
       C:\>RegisterPropertiesOnlyFilterForFileExt .sln
         Registers a Windows Search properties-only filter for .sln files.
 ___
+### RegisterNullFilterForFileExt.bat
+  Configures Windows Search to ignore the contents of all files with the specified extension (helpful for binary files). If the file extension is already registered with a different filter, it will be saved so that it may be later restored.
+
+**Usage:**
+
+    RegisterNullFilterForFileExt [.]Extension
+
+      Extension    Name of the extension to register, optionally prefixed by "."
+
+    Examples:
+      C:\>RegisterNullFilterForFileExt
+        Prompts for the file extension.
+    
+      C:\>RegisterNullFilterForFileExt "tar"
+        Registers a Windows Search null filter for .tar files.
+    
+      C:\>RegisterNullFilterForFileExt .tar
+        Registers a Windows Search null filter for .tar files.
+___
 ### RestoreFilterForFileExt.bat
   Configures Windows Search to restore the original search filter for the specified file extension. If the original search filter is not found, no operation is performed.
 
