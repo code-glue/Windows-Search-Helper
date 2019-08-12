@@ -83,6 +83,16 @@ ___
       C:\>RegisterPropertiesOnlyFilterForFileExt .sln
         Registers a Windows Search properties-only filter for .sln files.
 ___
+### RegisterNullFilterForAll.bat
+Configures Windows Search to ignore the contents of all files which have any of the below file extensions (generally binary files). If the file extension is already registered with a different filter, it will be saved so that it may be later restored.
+
+##### File extensions:
+  .386 .aif .aifc .aiff .aps .art .asf .au .avi .ba .baml .bi .bin .bkf .bmp .bsc .bti .cab .cache .cda .cgm .cod .com .cpl .cpt .cub .cur .dax .dbg .dca .dct .desklink .dex .dgn .dib .dl_ .dll .drv .drx .dvx .dwg .emf .eng .eps .etp .ex_ .exe .exp .eyb .fnd .fnt .fon .ghi .gif .gz .hdp .hqx .icm .ico .igr .ilk .imc .in_ .ino .ins .inv .jbf .jds .jfif .jpe .jpeg .jpg .key .latex .ldb .lib .m14 .m1v .ma .mapimail .mdb .mdb2 .mid .midi .mmf .mov .movie .mp2 .mp2v .mp3 .mpa .mpe .mpeg .mpg .mpp .mpv2 .mshc .msm .mso .mv .mydocs .ncb .o .obj .obs .oc_ .ocx .opt .par .pc6 .pcd .pch .pdb .pds .pic .pid .pma .pmc .PML .pmr .png .ppn .psd .pth .pvk .res .resources .rle .rmi .rose .rpc .rsc .rsp .sbr .sc2 .scd .sch .sit .snd .sr_ .sy_ .sym .sys .tap .tar .tbl .tgz .tlb .tsp .ttc .ttf .vbx .vue .vxd .wav .wax .wdp .wll .wlt .wm .wma .wmf .wmp .wmv .wmx .wmz .wsi .wsz .wvx .xesc .xix .xor .z .z96 .zfsendtotarget .zvf
+
+**Usage:**
+
+    RegisterNullFilterForAll <No Parameters>
+___
 ### RegisterNullFilterForFileExt.bat
   Configures Windows Search to ignore the contents of all files with the specified extension (helpful for binary files). If the file extension is already registered with a different filter, it will be saved so that it may be later restored.
 
