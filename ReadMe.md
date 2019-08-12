@@ -102,11 +102,18 @@ ___
         Restores the original Windows Search filter for .sln files.
 ___
 ### RebuildWindowsSearchIndex.bat
-  Deletes and rebuilds the Windows Search index. The default location for the index is "C:\ProgramData\Microsoft\Search\Data"
+  Stops the Windows Search service, deletes the Windows Search index, then restarts the Windows Search service which in turn rebuilds the index. The default location for the index is *"C:\ProgramData\Microsoft\Search\Data"*
   
 **Usage:**
 
     RebuildWindowsSearchIndex <No Parameters>
+___
+### DeleteWindowsSearchIndex.bat
+  Stops the Windows Search service then deletes the Windows Search index. The default location for the index is *"C:\ProgramData\Microsoft\Search\Data"*
+  
+**Usage:**
+
+    DeleteWindowsSearchIndex <No Parameters>
 ___
 ### RestartWindowsSearchService.bat
   Stops the Windows Search service (if necessary) then starts it back up.
